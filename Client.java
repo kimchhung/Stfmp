@@ -31,10 +31,8 @@ public class Client {
                     Request request = new Request(Constants.PROTOCOL_VERSION, userInput, params);
                     sendRequestToTheServer(connection, request);
                     break;
-                } else if (userInput.equals(Action.WRITE))
-                    params = new Params("file.txt", "helloworld");
-                else if (userInput.equals(Action.VIEW))
-                    params = new Params("file.txt", null);
+                } else
+                    params = getParamsFromInput(userInput);
 
                 // get response and print resultsRequest request = new
                 // Request(Constants.PROTOCOL_VERSION, userInput, params);
@@ -42,12 +40,34 @@ public class Client {
                 sendRequestToTheServer(connection, request);
 
                 Response response = readResponseFromTheServer(connection);
-                System.out.println("Response: " + response.getResult());
+                System.out.println("RawResponse : " + response.getResult());
+                System.out.println("Results : " + response.getData());
             }
         } catch (IOException e) {
             System.out.println("Connection fail : " + e.getMessage());
         }
 
+    }
+
+    static Params getParamsFromInput(String act) {
+        String filename = null;
+        String content = null;
+
+        if (act.equals(Action.WRITE)) {
+            System.out.print("Type Filename: ");
+            Scanner sc1 = new Scanner(System.in);
+            filename = sc1.nextLine();
+            System.out.print("Type Content:");
+            Scanner sc2 = new Scanner(System.in);
+            content = sc2.nextLine();
+
+        } else if (act.equals(Action.VIEW)) {
+            System.out.print("Type Filename: ");
+            Scanner sc1 = new Scanner(System.in);
+            filename = sc1.nextLine();
+
+        }
+        return new Params(filename, content);
     }
 
     static void sendRequestToTheServer(Socket connection, Request request) throws IOException {
