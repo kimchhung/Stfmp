@@ -35,8 +35,8 @@ public class Server {
                     String rawRequest = Constants.decrypteString(encypted);
                     Request request = Request.fromRawString(rawRequest);
 
-                    System.out.println("Request : " + encypted);
-                    System.out.println("Raw Request : " + rawRequest);
+                    System.out.println("Get Request : " + encypted);
+                    System.out.println("To Raw Request : " + rawRequest);
                     // scanner.close();
                     switch (request.getAction()) {
                         case Action.WRITE:
@@ -71,6 +71,8 @@ public class Server {
         String encryted = Constants.encrypteString(response.toRawResponse());
         printWriter.write(encryted);
         printWriter.flush();
+        System.out.println("Raw Response: " + response.toRawResponse());
+        System.out.println("Responsed: " + encryted);
     }
 
     private static void sendKeyResponse(Socket connection) throws IOException {
@@ -78,6 +80,7 @@ public class Server {
         PrintWriter printWriter = new PrintWriter(outputStream);
 
         String key = Constants.generateKey();
+        Constants.storeKey(key);
         Response response = new Response(Constants.PROTOCOL_VERSION, Status.OK, key);
         System.out.println("Send Key(1-9) : " + key);
 

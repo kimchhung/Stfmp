@@ -12,7 +12,7 @@ public class Client {
         try (Socket connection = new Socket("localhost", 9999)) {
 
             // Tell users what they can do
-            System.out.println("STFMP connected to port : 9999");
+            System.out.println("You have connected to port : 9999");
             System.out.println(" - Type 'write' :  write content to the file");
             System.out.println(" - Type 'view' :  view content of the file");
             System.out.println(" - Type 'close' :  close the connection.");
@@ -76,6 +76,8 @@ public class Client {
         String encypted = Constants.encrypteString(request.toRawString());
         printWriter.write(encypted);
         printWriter.flush();
+        System.out.println("Raw Request: " + request.toRawString());
+        System.out.println("Requested: " + encypted);
     }
 
     static Response readResponseFromTheServer(Socket connection) throws IOException {
@@ -94,7 +96,7 @@ public class Client {
         Response respone = Response.fromRawResponse(rawResponse);
         String key = respone.getData();
         Constants.storeKey(key);
-        System.out.println("Your Key :  " + Constants.loadKey());
+        System.out.println("Your key is :  " + Constants.loadKey());
 
     }
 
