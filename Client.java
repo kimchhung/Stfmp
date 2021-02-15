@@ -5,11 +5,18 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
 public class Client {
     public static void main(String[] args) {
 
+        System.setProperty("javax.net.ssl.trustStore", "ssl/trust-store-kimchhung.cacerts");
+        System.setProperty("javax.net.ssl.trustStorePassword", "88889999");
         // Connect to the server
-        try (Socket connection = new Socket("localhost", 9999)) {
+        try {
+            SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            SSLSocket connection = (SSLSocket) socketFactory.createSocket("localhost", 9999);
 
             // Tell users what they can do
             System.out.println("You have connected to port : 9999");
@@ -17,7 +24,7 @@ public class Client {
             System.out.println(" - Type 'view' :  view content of the file");
             System.out.println(" - Type 'close' :  close the connection.");
             // print key
-            readKeyFromTheServer(connection);
+
             // Read input from users, what they want to do
             InputStream keyboardInputStream = System.in;
             Scanner keyboadScanner = new Scanner(keyboardInputStream);
@@ -74,7 +81,7 @@ public class Client {
         OutputStream outputStream = connection.getOutputStream();
         PrintWriter printWriter = new PrintWriter(outputStream);
         String encypted = Constants.encrypteString(request.toRawString());
-        printWriter.write(encypted);
+        printWriter.write(request.toRawString() + "\r\n");
         printWriter.flush();
         System.out.println("Raw Request: " + request.toRawString());
         System.out.println("Requested: " + encypted);

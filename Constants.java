@@ -9,7 +9,7 @@ public class Constants {
 	public static final String PROTOCOL_VERSION = "STFMP/1.0";
 
 	public static String encrypteString(String raw) {
-		int key = Integer.parseInt(loadKey());
+		int key = 2;
 		String encryptedString = null;
 		if (key > 0) {
 			String b64encoded = Base64.getEncoder().encodeToString(raw.getBytes());
@@ -25,7 +25,7 @@ public class Constants {
 
 	public static String decrypteString(String encryptedString) {
 
-		int key = Integer.parseInt(loadKey());
+		int key = 2;
 		String raw = null;
 		if (key > 0) {
 			StringBuilder tmp = new StringBuilder();
